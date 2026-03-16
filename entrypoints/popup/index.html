@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tsuzuku</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <span class="logo">つづく</span>
+    <h1>Tsuzuku</h1>
+    <button id="import-btn" class="icon-btn" title="Import list">⬆</button>
+  </header>
+
+  <div id="import-panel" class="import-panel hidden">
+    <textarea id="import-input" placeholder="Paste JSON here..."></textarea>
+    <div class="import-actions">
+      <button id="import-confirm">Import</button>
+      <button id="import-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <main>
+    <p id="empty" class="empty hidden">No anime tracked yet.<br>Start watching on Franime or Crunchyroll.</p>
+    <ul id="anime-list"></ul>
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
