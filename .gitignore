@@ -7,6 +7,8 @@ node_modules/
 # Build output
 dist/
 build/
+.output/
+.wxt/
 
 # Environment
 .env
@@ -28,9 +30,11 @@ Thumbs.db
 npm-debug.log*
 
 # Package managers
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Personal data
+my-list.json
 
 # Chrome extension packed files
 *.crx
