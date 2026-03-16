@@ -64,5 +64,9 @@ function slugify(str) {
 function reportProgress() {
   const info = extractInfo();
   if (!info) return;
-  chrome.runtime.sendMessage({ type: 'SAVE_PROGRESS', payload: info });
+  try {
+    chrome.runtime.sendMessage({ type: 'SAVE_PROGRESS', payload: info });
+  } catch {
+    // extension context invalidated (e.g. after reload)
+  }
 }

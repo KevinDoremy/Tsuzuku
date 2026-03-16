@@ -5,6 +5,7 @@ export default defineConfig({
     name: 'Tsuzuku',
     description: 'Track your anime progress on Franime and Crunchyroll.',
     permissions: ['storage'],
+    host_permissions: ['https://graphql.anilist.co/*'],
     icons: {
       16: '/icon16.png',
       48: '/icon48.png',

@@ -9,15 +9,32 @@
   <header>
     <span class="logo">つづく</span>
     <h1>Tsuzuku</h1>
-    <button id="import-btn" class="icon-btn" title="Import list">⬆</button>
+    <div class="header-actions">
+      <button id="import-btn" class="icon-btn" title="Import from file">⬆</button>
+      <button id="export-btn" class="icon-btn" title="Export to file">⬇</button>
+      <button id="folder-btn" class="icon-btn" title="Local sync folder">📁</button>
+    </div>
   </header>
 
-  <div id="import-panel" class="import-panel hidden">
-    <textarea id="import-input" placeholder="Paste JSON here..."></textarea>
-    <div class="import-actions">
-      <button id="import-confirm">Import</button>
-      <button id="import-cancel">Cancel</button>
+  <input type="file" id="import-file" accept=".json" hidden />
+
+  <div id="setup-banner" class="setup-banner hidden">
+    <div class="setup-header">
+      <span class="setup-title">📁 Local backup</span>
+      <button id="setup-dismiss" class="setup-dismiss" title="Dismiss">✕</button>
     </div>
+    <p class="setup-desc">
+      Your list can be saved as a file on this device.
+      It stays safe even if you reinstall the extension.
+    </p>
+    <button id="setup-choose" class="setup-cta">Choose a folder</button>
+  </div>
+
+  <div id="folder-panel" class="folder-panel hidden">
+    <div class="folder-info">
+      <span id="folder-name" class="folder-name"></span>
+    </div>
+    <button id="folder-change">Change</button>
   </div>
 
   <main>

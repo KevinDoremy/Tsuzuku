@@ -15,19 +15,36 @@ export default defineContentScript({
 
 function extractInfo() {
   const path = window.location.pathname;
+  const params = new URLSearchParams(window.location.search);
 
+  // Primary: query params — e.g. /anime/hells-paradise?s=2&ep=7
+  const slugMatch = path.match(/\/anime\/([^/?]+)/);
+  const epParam = params.get('ep');
+  if (slugMatch && epParam) {
+    const slug = slugMatch[1];
+    const title = document.querySelector('h1')?.innerText?.replace(/\s+/g, ' ').trim() || unslugify(slug);
+    return {
+      animeId: slug,
+      title,
+      season: parseInt(params.get('s') || '1'),
+      episode: parseInt(epParam),
+      source: 'franime',
+      url: window.location.href,
+    };
+  }
+
+  // Fallback: episode in path — e.g. /anime/slug/saison-2/episode-7
   const patterns = [
     /\/anime\/([^/]+)\/(?:saison|season)-?(\d+)\/(?:episode|ep)-?(\d+)/i,
     /\/anime\/([^/]+)\/(?:episode|ep)-?(\d+)/i,
   ];
-
   for (const pattern of patterns) {
     const match = path.match(pattern);
     if (match) {
       const slug = match[1];
       const hasSeason = match.length === 4;
-      const title = document.querySelector('h1')?.textContent?.trim() || unslugify(slug);
-
+      const raw = document.querySelector('h1')?.innerText?.replace(/\s+/g, ' ').trim() || unslugify(slug);
+      const title = raw.replace(/\s+saison\s*\d+/gi, '').trim();
       return {
         animeId: slug,
         title,
@@ -39,25 +56,7 @@ function extractInfo() {
     }
   }
 
-  // Fallback: scrape DOM
-  const titleEl = document.querySelector('h1, .anime-title, [class*="title"]');
-  if (!titleEl) return null;
-
-  const title = titleEl.textContent.trim();
-  const pageText = document.title + ' ' + (document.querySelector('[class*="episode"], [class*="saison"]')?.textContent || '');
-  const episodeMatch = pageText.match(/(?:episode|ep\.?)\s*(\d+)/i);
-  const seasonMatch = pageText.match(/(?:saison|season|s)\s*(\d+)/i);
-
-  if (!episodeMatch) return null;
-
-  return {
-    animeId: slugify(title),
-    title,
-    season: seasonMatch ? parseInt(seasonMatch[1]) : 1,
-    episode: parseInt(episodeMatch[1]),
-    source: 'franime',
-    url: window.location.href,
-  };
+  return null;
 }
 
 function slugify(str) {
@@ -71,5 +70,9 @@ function unslugify(str) {
 function reportProgress() {
   const info = extractInfo();
   if (!info) return;
-  chrome.runtime.sendMessage({ type: 'SAVE_PROGRESS', payload: info });
+  try {
+    chrome.runtime.sendMessage({ type: 'SAVE_PROGRESS', payload: info });
+  } catch {
+    // extension context invalidated (e.g. after reload)
+  }
 }
