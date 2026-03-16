@@ -1,0 +1,13 @@
+{
+  "name": "tsuzuku",
+  "version": "0.1.0",
+  "description": "Track your anime progress on Franime and Crunchyroll.",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip"
+  },
+  "devDependencies": {
+    "wxt": "latest"
+  }
+}
